@@ -16,8 +16,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void createUsersTable() {
         try (Statement statement = connection.createStatement()) {
-            String sqlQuery = "create table if not exists users1" +
-                    "(id int primary key auto_increment, name varchar(45), lastName varchar(45))";
+            String sqlQuery = "create table if not exists users2" +
+                    "(id int primary key not null auto_increment, name varchar(45)," +
+                    " lastName varchar(45), age int)";
             statement.executeUpdate(sqlQuery);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -34,7 +35,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         try (Statement statement = connection.createStatement()) {
-            String sqlQuery = "drop table if exists users1 ";
+            String sqlQuery = "drop table if exists users.users2 ";
             statement.executeUpdate(sqlQuery);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,7 +49,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("insert into users1" +
+        try (PreparedStatement preparedStatement = connection.prepareStatement("insert into users.users2" +
                 "(name, lastName, age) values (?, ?, ?)")) {
 
             preparedStatement.setString(1, name);
@@ -69,7 +70,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void removeUserById(long id) {
         try (Statement statement = connection.createStatement()) {
-            String sqlQuery = "delete from users1 where id=?";
+            String sqlQuery = "delete from users.users2 where id=?";
             statement.executeUpdate(sqlQuery);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,7 +89,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
 
         try (Statement statement = connection.createStatement()) {
-            String sqlQuery = "select * from users1;";
+            String sqlQuery = "select * from users.users2;";
             ResultSet resultSet = statement.executeQuery(sqlQuery);
             while (resultSet.next()) {
                 User user = new User();
@@ -96,6 +97,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 user.setName(resultSet.getString("name"));
                 user.setLastName(resultSet.getString("lastName"));
                 user.setAge(resultSet.getByte("age"));
+
                 list.add(user);
             }
         } catch (SQLException e) {
@@ -111,9 +113,10 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        String sqlQuery = "truncate table users1";
+        String sqlQuery = "truncate table users.users2";
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sqlQuery);
+            System.out.println();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
