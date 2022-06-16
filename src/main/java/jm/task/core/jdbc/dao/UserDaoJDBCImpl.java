@@ -16,18 +16,12 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void createUsersTable() {
         try (Statement statement = connection.createStatement()) {
-            String sqlQuery = "create table if not exists users2" +
+            String sqlQuery = "create table if not exists users" +
                     "(id int primary key not null auto_increment, name varchar(45)," +
-                    " lastName varchar(45), age int)";
-            statement.executeUpdate(sqlQuery);
+                    " lastName varchar(45), age int not null )";
+            statement.execute(sqlQuery);
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-
-            if (connection != null) {
-                Util.disconnect();
-            }
-
         }
 
 
@@ -35,21 +29,15 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         try (Statement statement = connection.createStatement()) {
-            String sqlQuery = "drop table if exists users.users2 ";
+            String sqlQuery = "drop table if exists forjdbcapp.users";
             statement.executeUpdate(sqlQuery);
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-
-            if (connection != null) {
-                Util.disconnect();
-            }
-
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("insert into users.users2" +
+        try (PreparedStatement preparedStatement = connection.prepareStatement("insert into forjdbcapp.users" +
                 "(name, lastName, age) values (?, ?, ?)")) {
 
             preparedStatement.setString(1, name);
@@ -59,37 +47,23 @@ public class UserDaoJDBCImpl implements UserDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-
-            if (connection != null) {
-                Util.disconnect();
-            }
-
         }
     }
 
     public void removeUserById(long id) {
-        try (Statement statement = connection.createStatement()) {
-            String sqlQuery = "delete from users.users2 where id=?";
-            statement.executeUpdate(sqlQuery);
+        try (PreparedStatement preparedStatement = connection.prepareStatement("delete from forjdbcapp.users where id=?")) {
+           // String sqlQuery = "";
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-
-            if (connection != null) {
-                Util.disconnect();
-            }
-
         }
 
     }
 
     public List<User> getAllUsers() {
         List<User> list = new ArrayList<>();
-
-
         try (Statement statement = connection.createStatement()) {
-            String sqlQuery = "select * from users.users2;";
+            String sqlQuery = "select * from forjdbcapp.users;";
             ResultSet resultSet = statement.executeQuery(sqlQuery);
             while (resultSet.next()) {
                 User user = new User();
@@ -102,29 +76,25 @@ public class UserDaoJDBCImpl implements UserDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
+        } /*finally {
             if (connection != null) {
                 Util.disconnect();
             }
 
+
         }
+        */
 
         return list;
     }
 
     public void cleanUsersTable() {
-        String sqlQuery = "truncate table users.users2";
+        String sqlQuery = "truncate table forjdbcapp.users";
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sqlQuery);
             System.out.println();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-
-            if (connection != null) {
-                Util.disconnect();
-            }
-
         }
 
     }

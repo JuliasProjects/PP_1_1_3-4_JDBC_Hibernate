@@ -19,11 +19,12 @@ public class Main {
         userService.saveUser("Ellen", "Smith", (byte) 99);
 
         for (User users : userService.getAllUsers()) {
+            userService.getAllUsers();
             System.out.println(users);
 
         }
 
-        userService.getAllUsers();
+
 
         userService.removeUserById(3);
         userService.cleanUsersTable();

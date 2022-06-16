@@ -11,10 +11,12 @@ public class UserServiceImpl implements UserService {
    UserDao userDao = new UserDaoJDBCImpl(); 
     public void createUsersTable() {
         userDao.createUsersTable();
+        System.out.println("Table created");
     }
 
     public void dropUsersTable() {
         userDao.dropUsersTable();
+        System.out.println("Table dropped");
     }
 
     public void saveUser(String name, String lastName, byte age) {
@@ -24,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     public void removeUserById(long id) {
         userDao.removeUserById(id);
+        System.out.println("User with id " + id + " has been removed");
 
     }
 
@@ -38,6 +41,7 @@ public class UserServiceImpl implements UserService {
 
     public void cleanUsersTable() {
         userDao.cleanUsersTable();
+
 
     }
 }
