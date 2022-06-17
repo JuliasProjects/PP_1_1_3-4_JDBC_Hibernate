@@ -5,29 +5,24 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
 
+import java.sql.SQLException;
+import java.util.List;
+
 
 public class Main {
-    public static void main(String[] args) {
-         final  UserService userService = new UserServiceImpl();
+    public static void main(String[] args) throws SQLException {
+        UserService us = new UserServiceImpl();
+        us.createUsersTable();
 
-        //drop
-        userService.createUsersTable();
+        us.saveUser("Ivan", "Ivanov", (byte) 30);
+        us.saveUser("Just", "Me", (byte) 28);
+        us.saveUser("Alex", "Ovechkin", (byte) 36);
+        us.saveUser("Wayne", "Gretzky", (byte) 61);
 
-        userService.saveUser("John", "Doe", (byte) 27);
-        userService.saveUser("Jane", "Doe", (byte) 16);
-        userService.saveUser("Adam", "Smith", (byte) 87);
-        userService.saveUser("Ellen", "Smith", (byte) 99);
+        List<User> list = us.getAllUsers();
+        System.out.println(list);
 
-        for (User users : userService.getAllUsers()) {
-            userService.getAllUsers();
-            System.out.println(users);
-
-        }
-
-
-
-        userService.removeUserById(3);
-        userService.cleanUsersTable();
-        userService.dropUsersTable();
+        us.cleanUsersTable();
+        us.dropUsersTable();
     }
 }

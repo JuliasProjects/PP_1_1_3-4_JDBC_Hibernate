@@ -8,93 +8,112 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private final Connection connection = Util.getConnection();
+    // Connection connection = Util.getConnection();
 
     public UserDaoJDBCImpl() {
 
     }
 
     public void createUsersTable() {
-        try (Statement statement = connection.createStatement()) {
-            String sqlQuery = "create table if not exists users" +
-                    "(id int primary key not null auto_increment, name varchar(45)," +
-                    " lastName varchar(45), age int not null )";
-            statement.execute(sqlQuery);
+        try {
+            Connection connection = Util.getConnection();
+
+            try (Statement statement = connection.createStatement()) {
+                String sqlQuery = "create table if not exists users" +
+                        "(id int primary key not null auto_increment, name varchar(45)," +
+                        " lastName varchar(45), age int not null )";
+                statement.execute(sqlQuery);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
 
     }
 
     public void dropUsersTable() {
-        try (Statement statement = connection.createStatement()) {
-            String sqlQuery = "drop table if exists forjdbcapp.users";
-            statement.executeUpdate(sqlQuery);
+        try {
+            Connection connection = Util.getConnection();
+            try (Statement statement = connection.createStatement()) {
+                String sqlQuery = "drop table if exists forjdbcapp.users";
+                statement.executeUpdate(sqlQuery);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("insert into forjdbcapp.users" +
+    public void saveUser(String name, String lastName, byte age) throws SQLException {
+        Connection connection = Util.getConnection();
+        connection.setAutoCommit(false);
+        try (PreparedStatement preparedStatement = connection.prepareStatement("insert into users" +
                 "(name, lastName, age) values (?, ?, ?)")) {
 
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setInt(3, age);
             preparedStatement.executeUpdate();
+            connection.commit();
 
         } catch (SQLException e) {
             e.printStackTrace();
+            connection.rollback();
         }
+        connection.close();
     }
 
-    public void removeUserById(long id) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("delete from forjdbcapp.users where id=?")) {
-           // String sqlQuery = "";
+    public void removeUserById(long id) throws SQLException {
+        Connection connection = Util.getConnection();
+        connection.setAutoCommit(false);
+        try (PreparedStatement preparedStatement = connection.prepareStatement("delete from users where id=?")) {
+            // String sqlQuery = "";
+            preparedStatement.setLong(1, id);
             preparedStatement.execute();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            connection.rollback();
         }
+        connection.close();
 
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws SQLException {
+        Connection connection = Util.getConnection();
         List<User> list = new ArrayList<>();
+        connection.setAutoCommit(false);
+        String sqlQuery = "SELECT id, name, lastName, age FROM users";
         try (Statement statement = connection.createStatement()) {
-            String sqlQuery = "select * from forjdbcapp.users;";
-            ResultSet resultSet = statement.executeQuery(sqlQuery);
-            while (resultSet.next()) {
-                User user = new User();
-                user.setId(resultSet.getLong("id"));
-                user.setName(resultSet.getString("name"));
-                user.setLastName(resultSet.getString("lastName"));
-                user.setAge(resultSet.getByte("age"));
+            ResultSet rs = statement.executeQuery(sqlQuery);
 
+            while (rs.next()) {
+                long id = rs.getLong("id");
+                User user = new User(rs.getString("name"),
+                        rs.getString("lastName"), rs.getByte("age"));
+                user.setId(id);
                 list.add(user);
             }
+
+            connection.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
-        } /*finally {
-            if (connection != null) {
-                Util.disconnect();
-            }
-
-
+            connection.rollback();
         }
-        */
+        connection.close();
 
         return list;
     }
 
-    public void cleanUsersTable() {
-        String sqlQuery = "truncate table forjdbcapp.users";
+    public void cleanUsersTable() throws SQLException {
+        Connection connection = Util.getConnection();
+        connection.setAutoCommit(false);
+        String sqlQuery = "truncate table users";
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sqlQuery);
-            System.out.println();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            connection.rollback();
         }
 
     }
