@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    // Connection connection = Util.getConnection();
+
 
     public UserDaoJDBCImpl() {
 
@@ -56,7 +56,7 @@ public class UserDaoJDBCImpl implements UserDao {
             e.printStackTrace();
             connection.rollback();
         }
-        connection.close();
+
     }
 
     public void removeUserById(long id) throws SQLException {
@@ -70,7 +70,7 @@ public class UserDaoJDBCImpl implements UserDao {
             e.printStackTrace();
             connection.rollback();
         }
-        connection.close();
+
 
     }
 
@@ -78,26 +78,22 @@ public class UserDaoJDBCImpl implements UserDao {
         Connection connection = Util.getConnection();
         List<User> list = new ArrayList<>();
         connection.setAutoCommit(false);
-        try (Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery("SELECT id, name, lastName, age FROM users");
-
-            while (rs.next()) {
-                long id = rs.getLong("id");
-                User user = new User(rs.getString("name"),
-                        rs.getString("lastName"), rs.getByte("age"));
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery("SELECT * FROM users")) {
+            while (resultSet.next()) {
+                long id = resultSet.getLong("id");
+                User user = new User(resultSet.getString("name"),
+                        resultSet.getString("lastName"), resultSet.getByte("age"));
                 user.setId(id);
                 list.add(user);
             }
 
             connection.commit();
-
         } catch (SQLException e) {
             e.printStackTrace();
             connection.rollback();
         }
-        connection.close();
-
-
+      //  connection.close();
         return list;
     }
 
