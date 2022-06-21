@@ -19,8 +19,10 @@ public class Main {
         us.saveUser("Alex", "Ovechkin", (byte) 36);
         us.saveUser("Wayne", "Gretzky", (byte) 61);
 
-        List<User> list = us.getAllUsers();
-        System.out.println(list);
+        for (User users : us.getAllUsers()) {
+            System.out.println(users);
+
+        }
 
         us.cleanUsersTable();
         us.dropUsersTable();
