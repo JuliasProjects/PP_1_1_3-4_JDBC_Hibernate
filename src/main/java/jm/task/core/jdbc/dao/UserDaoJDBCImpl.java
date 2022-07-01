@@ -9,15 +9,13 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-
+    //CLOSE CONNECTION!!!!!!!!!!!!!!!!!!!!!!!!!!
     public UserDaoJDBCImpl() {
 
     }
 
     public void createUsersTable() {
-        try {
-            Connection connection = Util.getConnection();
-
+        try (Connection connection = Util.getConnection()) {
             try (Statement statement = connection.createStatement()) {
                 statement.execute("create table if not exists users" +
                         "(id int primary key not null auto_increment, name varchar(45)," +
@@ -30,14 +28,14 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try {
-            Connection connection = Util.getConnection();
+        try (Connection connection = Util.getConnection()) {
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate("drop table if exists users");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
     public void saveUser(String name, String lastName, byte age) throws SQLException {
@@ -56,7 +54,7 @@ public class UserDaoJDBCImpl implements UserDao {
             e.printStackTrace();
             connection.rollback();
         }
-
+        connection.close();
     }
 
     public void removeUserById(long id) throws SQLException {
@@ -70,8 +68,7 @@ public class UserDaoJDBCImpl implements UserDao {
             e.printStackTrace();
             connection.rollback();
         }
-
-
+        connection.close();
     }
 
     public List<User> getAllUsers() throws SQLException {
@@ -93,7 +90,7 @@ public class UserDaoJDBCImpl implements UserDao {
             e.printStackTrace();
             connection.rollback();
         }
-      //  connection.close();
+        connection.close();
         return list;
     }
 
@@ -107,6 +104,6 @@ public class UserDaoJDBCImpl implements UserDao {
             e.printStackTrace();
             connection.rollback();
         }
-
+        connection.close();
     }
 }
