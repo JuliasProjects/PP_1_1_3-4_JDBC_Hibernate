@@ -9,32 +9,34 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    //CLOSE CONNECTION!!!!!!!!!!!!!!!!!!!!!!!!!!
     public UserDaoJDBCImpl() {
-
     }
 
-    public void createUsersTable() {
-        try (Connection connection = Util.getConnection()) {
-            try (Statement statement = connection.createStatement()) {
-                statement.execute("create table if not exists users" +
-                        "(id int primary key not null auto_increment, name varchar(45)," +
-                        " lastName varchar(45), age int not null )");
-            }
+    public void createUsersTable() throws SQLException {
+        Connection connection = Util.getConnection();
+        try {
+            Statement statement = connection.createStatement();
+            statement.execute("create table if not exists users" +
+                    "(id int primary key not null auto_increment, name varchar(45)," +
+                    " lastName varchar(45), age int not null )");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        connection.close();
 
     }
 
-    public void dropUsersTable() {
-        try (Connection connection = Util.getConnection()) {
-            try (Statement statement = connection.createStatement()) {
-                statement.executeUpdate("drop table if exists users");
-            }
+    public void dropUsersTable() throws SQLException {
+        Connection connection = Util.getConnection();
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("drop table if exists users");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        connection.close();
 
     }
 
