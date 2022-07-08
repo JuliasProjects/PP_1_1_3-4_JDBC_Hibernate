@@ -5,18 +5,17 @@ import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
     UserDao userDao = new UserDaoJDBCImpl();
 
-    public void createUsersTable() {
+    public void createUsersTable() throws SQLException {
         userDao.createUsersTable();
         System.out.println("Table created");
     }
 
-    public void dropUsersTable() {
+    public void dropUsersTable() throws SQLException {
         userDao.dropUsersTable();
         System.out.println("Table dropped");
     }

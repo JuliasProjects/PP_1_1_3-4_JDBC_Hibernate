@@ -3,22 +3,23 @@ package jm.task.core.jdbc.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Util {
-    public static Connection getConnection() throws SQLException {
 
-        String hostName = "localhost";
-        String dbName = "mysql";
-        String userName = "root";
-        String password = "root";
+    private static final Logger logger = Logger.getLogger(Util.class.getCanonicalName());
+    private static final String URL = "jdbc:mysql://localhost:3306/users";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "root";
 
-        return getConnection(hostName, dbName, userName, password);
-    }
+    public static Connection getConnection() {
 
-    public static Connection getConnection(String hostName, String dbName,
-                                           String userName, String password) throws SQLException {
-
-        String connectionURL = "jdbc:mysql://" + hostName + ":3306/" + dbName;
-        return DriverManager.getConnection(connectionURL, userName, password);
+        try {
+            return DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Не удалось установить соединение с БД: " + e);
+            return null;
+        }
     }
 }
