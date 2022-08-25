@@ -19,9 +19,9 @@ public class Util {
 
     private static SessionFactory sessionFactory;
 
-    private static final String URL = "jdbc:mysql://localhost:3307/db";
-    private static final String USER = "user";
-    private static final String PASSWORD = "password";
+    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "17_Zogita";
 
     public static Connection getJdbcDbConnection() {
         try {
@@ -39,11 +39,11 @@ public class Util {
 
                 Properties settings = new Properties();
 
-                settings.put(Environment.DRIVER, "com.mysql.jdbc.Driver");
-                settings.put(Environment.URL, "jdbc:mysql://localhost:3307/db");
-                settings.put(Environment.USER, "user");
-                settings.put(Environment.PASS, "password");
-                settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
+                settings.put(Environment.DRIVER, "org.postgresql.Driver");
+                settings.put(Environment.URL, "jdbc:postgresql://localhost:5432/postgres");
+                settings.put(Environment.USER, "postgres");
+                settings.put(Environment.PASS, "17_Zogita");
+                settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgresSQLDialect");
 
                 settings.put(Environment.SHOW_SQL, "true");
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
