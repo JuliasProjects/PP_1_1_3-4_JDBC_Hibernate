@@ -18,8 +18,8 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = Util.getJdbcDbConnection()) {
             try (Statement statement = connection.createStatement()) {
                 statement.execute("create table if not exists users" +
-                        "(id int primary key not null auto_increment, name varchar(45)," +
-                        " lastName varchar(45), age int not null )");
+                        "(id serial primary key not null, name character varying(45)," +
+                        " lastName character varying(45), age int not null )");
             }
         } catch (SQLException e) {
             e.printStackTrace();

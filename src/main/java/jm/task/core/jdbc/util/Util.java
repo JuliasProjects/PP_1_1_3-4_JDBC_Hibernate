@@ -19,7 +19,7 @@ public class Util {
 
     private static SessionFactory sessionFactory;
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String URL = "jdbc:postgresql://localhost:5432/burritos_db";
     private static final String USER = "postgres";
     private static final String PASSWORD = "17_Zogita";
 
@@ -43,7 +43,7 @@ public class Util {
                 settings.put(Environment.URL, "jdbc:postgresql://localhost:5432/burritos_db");
                 settings.put(Environment.USER, "postgres");
                 settings.put(Environment.PASS, "17_Zogita");
-                settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgresSQLDialect");
+                settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
 
                 settings.put(Environment.SHOW_SQL, "true");
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");

@@ -18,8 +18,9 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.createSQLQuery("CREATE TABLE IF NOT EXISTS table_name" +
-                    " (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(45), lastname VARCHAR(45), age INT);").executeUpdate();
+            session.createSQLQuery("CREATE TABLE IF NOT EXISTS users" +
+                    " (id SERIAL PRIMARY KEY NOT NULL , name CHARACTER VARYING(45) NOT NULL , " +
+                    "lastname CHARACTER VARYING(45)," +      " age INT);").executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -34,7 +35,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.createSQLQuery("DROP TABLE IF EXISTS table_name;").executeUpdate();
+            session.createSQLQuery("DROP TABLE IF EXISTS users;").executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -80,7 +81,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction;
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            Query query = session.createNativeQuery("SELECT * FROM table_name  where id = ?;", User.class);
+            Query query = session.createNativeQuery("select * from users ", User.class);
             List<User> list = query.getResultList();
             transaction.commit();
             return list;
