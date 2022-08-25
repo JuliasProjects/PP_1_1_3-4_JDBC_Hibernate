@@ -40,7 +40,7 @@ public class Util {
                 Properties settings = new Properties();
 
                 settings.put(Environment.DRIVER, "org.postgresql.Driver");
-                settings.put(Environment.URL, "jdbc:postgresql://localhost:5432/postgres");
+                settings.put(Environment.URL, "jdbc:postgresql://localhost:5432/burritos_db");
                 settings.put(Environment.USER, "postgres");
                 settings.put(Environment.PASS, "17_Zogita");
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgresSQLDialect");

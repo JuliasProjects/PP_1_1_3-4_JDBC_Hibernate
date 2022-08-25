@@ -18,7 +18,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.createSQLQuery("CREATE TABLE IF NOT EXISTS users" +
+            session.createSQLQuery("CREATE TABLE IF NOT EXISTS table_name" +
                     " (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(45), lastname VARCHAR(45), age INT);").executeUpdate();
             transaction.commit();
         } catch (Exception e) {
@@ -34,7 +34,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.createSQLQuery("DROP TABLE IF EXISTS users;").executeUpdate();
+            session.createSQLQuery("DROP TABLE IF EXISTS table_name;").executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -80,7 +80,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction;
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            Query query = session.createNativeQuery("SELECT * FROM users;", User.class);
+            Query query = session.createNativeQuery("SELECT * FROM table_name  where id = ?;", User.class);
             List<User> list = query.getResultList();
             transaction.commit();
             return list;
@@ -95,7 +95,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction;
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.createSQLQuery("DELETE FROM users WHERE true;").executeUpdate();
+            session.createSQLQuery("DELETE FROM  users WHERE true;").executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
