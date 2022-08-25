@@ -9,9 +9,9 @@ import java.util.logging.Logger;
 public class Util {
 
     private static final Logger logger = Logger.getLogger(Util.class.getCanonicalName());
-    private static final String URL = "jdbc:mysql://localhost:3306/users";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
+    private static final String URL = "jdbc:postgresql://localhost:5432/burritos_db";
+    private static final String USERNAME = "postgres";
+    private static final String PASSWORD = "17_Zogita";
 
     public static Connection getConnection() {
 

@@ -20,8 +20,8 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute("create table if not exists users" +
-                    "(id int primary key not null auto_increment, name varchar(45)," +
-                    " lastName varchar(45), age int not null )");
+                    "(id serial primary key not null, " + "name character varying(45)," +
+                    " lastName character varying(45), age int not null )");
         } catch (SQLException e) {
             logger.log(Level.SEVERE, e.getMessage());
         }
@@ -38,7 +38,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     }
 
-    public void saveUser(String name, String lastName, byte age){
+    public void saveUser(String name, String lastName, byte age) {
         try (Connection connection = Util.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("insert into users" +
                      "(name, lastName, age) values (?, ?, ?)")) {
@@ -53,7 +53,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public void removeUserById(long id){
+    public void removeUserById(long id) {
         try (Connection connection = Util.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("delete from users where id=?")) {
             connection.setAutoCommit(false);
@@ -65,7 +65,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         List<User> list = new ArrayList<>();
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement();
@@ -86,7 +86,7 @@ public class UserDaoJDBCImpl implements UserDao {
         return list;
     }
 
-    public void cleanUsersTable(){
+    public void cleanUsersTable() {
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("truncate table users");
